@@ -1,0 +1,30 @@
+<header class="hero-unit" id="banner">
+  <div class="container">
+    <h1>Keywords to watch</h1>
+  </div>
+</header>
+
+<div class="container">
+	<div class='row'>
+		<div class='col-lg-12'>
+		  <form class="form-inline">
+		    <h4>Manage keywords to look for</h4>
+		    <div class="form-group">
+		      <input type="text" class="form-control" placeholder="Keyword" ng-model="keywordwatchCtrl.keywordName">
+		      <input type="text" class="form-control" placeholder="Category" ng-model="keywordwatchCtrl.keywordCategory">
+		      <span class="">
+		        <button type="submit" class="btn btn-primary" ng-click="keywordwatchCtrl.addKeyword()">Add New</button>
+		      </span>
+		    </div>
+		  </form>
+		</div>
+	</div>
+
+  <div class="row">
+    <div class="col-lg-6">
+      <ul class="nav nav-tabs nav-stacked" ng-repeat="keyword in keywordwatchCtrl.keywordCollection">
+        <li><a href="#"><span class="label label-primary">{{keyword.category}}</span> {{keyword.name}}<button type="button" class="close" ng-click="keywordwatchCtrl.deleteKeyword(keyword)">&times;</button></a></li>
+      </ul>
+    </div>
+  </div>
+</div>

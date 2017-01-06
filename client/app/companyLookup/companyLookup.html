@@ -1,0 +1,30 @@
+<header class="hero-unit" id="banner">
+  <div class="container">
+    <h1>Company Identifier Lookup</h1>
+  </div>
+</header>
+
+<div class="container">
+	<div class='row'>
+		<div class='col-lg-12'>
+		  <form class="form-inline">
+		    <h4>Manage text which identifies a company symbol</h4>
+		    <div class="form-group">
+		      <input type="text" class="form-control" placeholder="Company name" ng-model="companyLookupCtrl.companyName">
+		      <input type="text" class="form-control" placeholder="Symbol" ng-model="companyLookupCtrl.companySymbol">
+		      <span class="">
+		        <button type="submit" class="btn btn-primary" ng-click="companyLookupCtrl.addCompany()">Add New</button>
+		      </span>
+		    </div>
+		  </form>
+		</div>
+	</div>
+
+  <div class="row">
+    <div class="col-lg-6">
+      <ul class="nav nav-tabs nav-stacked" ng-repeat="companylookup in companyLookupCtrl.companylookupCollection">
+        <li><a href="#">{{companylookup.name}} <span class="label label-primary">{{companylookup.symbol}}</span><button type="button" class="close" ng-click="companyLookupCtrl.deleteCompany(companylookup)">&times;</button></a></li>
+      </ul>
+    </div>
+  </div>
+</div>

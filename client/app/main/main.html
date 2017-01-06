@@ -1,0 +1,22 @@
+<header class="hero-unit" id="banner">
+  <div class="container">
+    <h1>News</h1>
+    <p>{{$ctrl.storyCollection.length}} stories</p>
+  </div>
+</header>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">      
+      <ul class="nav nav-tabs nav-stacked" ng-repeat="story in $ctrl.storyCollection">      
+        <li>
+          <a href="{{story.link}}">
+            <span class="label" ng-class="story.position=='Buy' ? 'label-success' : (story.position=='Sell' ? 'label-danger' : '')">{{story.position}}</span>
+            <span class="label label-primary">{{story.companies}}</span> 
+            {{story.title}}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

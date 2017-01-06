@@ -1,0 +1,31 @@
+<header class="hero-unit" id="banner">
+  <div class="container">
+    <h1>Rating Lookup</h1>
+  </div>
+</header>
+
+<div class="container">
+	<div class='row'>
+		<div class='col-lg-12'>
+		  <form class="form-inline">
+		    <h4>Manage text which identifies BUY or SELL</h4>
+		    <div class="form-group">
+		    	<label class="radio-inline"><input type="radio" ng-model="ratingLookupCtrl.newRatingValue" name='ratingValue' id="optionsRadios1" value="Buy">Buy</label>
+				<label class="radio-inline"><input type="radio" ng-model="ratingLookupCtrl.newRatingValue" name='ratingValue' id="optionsRadios2" value="Sell">Sell</label>
+		      <input type="text" class="form-control" placeholder="Add a new thing here." ng-model="ratingLookupCtrl.newRatingName">
+		      <span class="">
+		        <button type="submit" class="btn btn-primary" ng-click="ratingLookupCtrl.addRating()">Add New</button>
+		      </span>
+		    </div>
+		  </form>
+		</div>
+	</div>
+
+  <div class="row">
+    <div class="col-lg-6">
+      <ul class="nav nav-tabs nav-stacked" ng-repeat="ratinglookup in ratingLookupCtrl.ratinglookupCollection">
+        <li><a href="#">{{ratinglookup.name}} <span class="label" ng-class="(ratinglookup.rating=='Buy' ? 'label-success' : 'label-danger')">{{ratinglookup.rating}}</span><button type="button" class="close" ng-click="ratingLookupCtrl.deleteRating(ratinglookup)">&times;</button></a></li>
+      </ul>
+    </div>
+  </div>
+</div>
