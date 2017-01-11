@@ -130,7 +130,6 @@
   "scripts": {
     "test": "gulp test",
     "update-webdriver": "node node_modules/protractor/bin/webdriver-manager update",
-    "postinstall": "gulp build",
     "start": "node server"
   },
   "private": true
