@@ -33,6 +33,14 @@ export class MainController {
     }
   }
 
+  fireThing() {
+    console.log('fire thing');
+    this.$http.get('/api/stories')
+      .then(response => {
+        console.log('success');
+      });
+  }
+
 // CAN BE USED TO DISMISS A STORY 
 // OR TAG AS IMPORTANT
   deleteThing(story) {

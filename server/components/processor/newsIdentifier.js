@@ -2,35 +2,74 @@ import Story from '../../api/story/story.model';
 import Processor from '../../api/processor/processor.model';
 import Ratinglookup from '../../api/ratinglookup/ratinglookup.model';
 import Companylookup from '../../api/companylookup/companylookup.model';
+import Keywordlookup from '../../api/keyword/keyword.model';
 
-var promiseRating = Ratinglookup.find({}).exec();
-var promiseCompany = Companylookup.find({}).exec();
+export function processor() {
+  cleanStoryCollection();
+  processStories();
+  
+}
 
-promiseRating.then(function(ratingCollection) {
-  promiseCompany.then(function(companyCollection) {
-    Story.find({}, function(err, stories) {
-      if (err) throw err;
+function cleanStoryCollection() {
+  var today = new Date(); 
+  var targetDate= new Date();
+  targetDate.setDate(today.getDate() - 1);
+  targetDate.setHours(0);
+  targetDate.setMinutes(0);
+  targetDate.setSeconds(0);
 
-      stories.forEach(function(story){
-        var item = story;
-        var shortTitle = createShortTitle(item.title);
-        var companyList = parseCompanies(shortTitle, companyCollection);
-        var buyOrSell = findBuyOrSell(shortTitle, ratingCollection);
-        Processor.find({}).remove().then(() => {
-          Processor.create({
-            title: item.title,
-            shorttitle: shortTitle,
-                summary: item.summary,
-                link: item.link,
-                pubdate: item.pubdate,
-                companies: companyList,
-                position: buyOrSell
+//  Story.remove({pubdate: {$lte:targetDate}});
+
+  Story.find({}, function(err, stories) {
+    stories.forEach(function(story){
+      var selectedDate = story.pubdate;
+    
+      if (Date.parse(targetDate ) <= Date.parse(selectedDate)) {
+        //console.log('Within Date limits - ' + targetDate + ' :: ' + selectedDate);
+      } else {
+        story.remove().then(() => { console.log('-> Story removed');  });
+      }
+    });
+  });
+}
+
+function processStories() {
+  var promiseRating = Ratinglookup.find({}).exec();
+  var promiseCompany = Companylookup.find({}).exec();
+  var promiseKeyword = Keywordlookup.find({}).exec();
+
+  promiseRating.then(function(ratingCollection) {
+    promiseCompany.then(function(companyCollection) {
+      promiseKeyword.then(function(keywordCollection) {
+        Story.find({}, function(err, stories) {
+          if (err) throw err;
+
+          stories.forEach(function(story){
+            var item = story;
+            var shortTitle = createShortTitle(item.title);
+            var companyList = parseCompanies(shortTitle, companyCollection);
+            var buyOrSell = findBuyOrSell(shortTitle, ratingCollection);
+            var buyOrSellCount = findBuyOrSellCount(shortTitle, ratingCollection);
+            var keywords = parseKeywords(shortTitle, keywordCollection);
+            Processor.find({}).remove().then(() => {
+              Processor.create({
+                title: item.title,
+                shorttitle: shortTitle,
+                    summary: item.summary,
+                    link: item.link,
+                    pubdate: item.pubdate,
+                    companies: companyList,
+                    position: buyOrSell,
+                    positionCount: buyOrSellCount,
+                    keywords: keywords
+              });
+            });
           });
         });
       });
     });
-  });
-});
+  });  
+}
 
 function removeSpecialCharacters(title) {
   var stringToReplace = title + ' '; //Force 'title' to be a string by appending an extra space
@@ -53,6 +92,18 @@ function findBuyOrSell(title, ratingCollection) {
   return ratingReturn;
 }
 
+function findBuyOrSellCount(title, ratingCollection) {  
+  var ratingReturn = 0;
+  ratingCollection.forEach(function(rating) {
+    var padTitle = ' ' + title.toLowerCase() + ' ';
+    if (padTitle.indexOf(rating.name.toLowerCase()) !== -1) {
+      if(rating.rating == 'Buy')  ratingReturn++;
+      else if (rating.rating == 'Sell') ratingReturn--;
+    }
+  });
+  return ratingReturn;
+}
+
 
 function parseCompanies(title, companyCollection) {
   var companyReturn = '';
@@ -63,6 +114,17 @@ function parseCompanies(title, companyCollection) {
     }
   });
   return companyReturn.trim();
+}
+
+function parseKeywords(title, keywordCollection) {
+  var keywordReturn = '';
+  keywordCollection.forEach(function(keyword) {
+    if ((title.indexOf(keyword.name.toLowerCase()) !== -1) && (keywordReturn.indexOf(keyword.category.toLowerCase()) === -1)) {    
+      keywordReturn += keyword.category + ' ';
+      return keyword.category;
+    }
+  });
+  return keywordReturn.trim();
 }
 
 function removeStopWords(title) {

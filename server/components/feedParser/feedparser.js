@@ -65,93 +65,107 @@ http://finance.yahoo.com/rss/MajorIntegratedOilGas
   EX: http://finance.yahoo.com/rss/headline?s=yhoo,msft,tivo
 
 */
-console.log('parsing feeds...');
-var rssList = ['http://articlefeeds.nasdaq.com/nasdaq/categories?category=Stocks',
-               'http://feeds.marketwatch.com/marketwatch/marketpulse',
-               'http://feeds.marketwatch.com/marketwatch/realtimeheadlines/',
-               'http://www.cnbc.com/id/19854910/device/rss/rss.html',
-               'http://www.cnbc.com/id/15839135/device/rss/rss.html',
-               'http://www.cnbc.com/id/10001147/device/rss/rss.html',
-               'http://www.cnbc.com/id/100727362/device/rss/rss.html',
-               'http://www.cnbc.com/id/100003114/device/rss/rss.html',
-               'http://www.cnbc.com/id/19836768/device/rss/rss.html',
-               'http://www.cnbc.com/id/10000115/device/rss/rss.html',
-               'http://www.cnbc.com/id/20409666/device/rss/rss.html',
-               'http://www.cnbc.com/id/10000113/device/rss/rss.html',
-               'http://feeds.reuters.com/reuters/businessNews',
-               'http://feeds.reuters.com/news/wealth',
-               'http://feeds.reuters.com/Reuters/PoliticsNews',
-               'http://feeds.reuters.com/reuters/topNews',
-               'http://feeds.reuters.com/Reuters/domesticNews',
-               'http://feeds.reuters.com/Reuters/worldNews',
-               'http://feeds.reuters.com/reuters/hotStocksNews',
-               'http://feeds.reuters.com/reuters/mergersNews',
-               'http://feeds.reuters.com/reuters/governmentfilingsNews',
-               'https://www.investing.com/rss/market_overview.rss',
-               'http://rss.cnn.com/rss/money_latest.rss',
-               'http://www.investopedia.com/feedbuilder/feed/getFeed?feedName=rss_headline',
-               'http://feeds2.feedburner.com/businessinsider',
-               'http://www.businessinsider.com/trending/rss',
-               'http://www.businessinsider.com/moneygame/rss'
-              ]
-
 
 var FeedParser = require('feedparser');
+var Promise    = require('bluebird');
 var request = require('request'); // for fetching the feed
 var feedparser = new FeedParser();
-
-for (var i=0; i < rssList.length; i++) {
-  var req = request(rssList[i]);
+var processFeeder = require('../processor/newsIdentifier')
 
 
-  req.on('error', function (error) {
-    // handle any request errors
-  });
+export function initScan() {
+  console.log('-> Begin fetching feeds');
+  const fetch = (url) => {
+    console.log('...' + url);
+    return new Promise((resolve, reject) => {
+      if (!url) { return reject(new Error(`Bad URL (url: ${url}`)); }
 
-  req.on('response', function (res) {
-    var stream = this; // `this` is `req`, which is a stream
+      const feedparser = new FeedParser(),
+            items = [];
 
-    if (res.statusCode !== 200) {
-      this.emit('error', new Error('Bad status code'));
-    }
-    else {
-      stream.pipe(feedparser);
-    }
+      feedparser.on('error', (e) => {
+        return reject(e);
+      }).on('readable', () => {
+        // This is where the action is!
+        var item;
+
+        //Story.find({}).remove().then(() => {  
+          while (item = feedparser.read()) {     
+            if (typeof item.title !== 'undefined' && item.title) {        
+              Story.update(
+                {
+                  title: item.title
+                },
+                {
+                  title: item.title,
+                  summary: item.summary,
+                  link: item.link,
+                  pubdate: item.pubdate
+                },
+                {
+                  upsert:true
+                },
+                function(err,data) {
+                  if (err) console.log(err);
+                });
+            }
+          }
+        //});
+      }).on('end', () => {
+        resolve({
+          meta: feedparser.meta,
+          records: items
+        });
+      });
+
+      request({
+        method: 'GET',
+        url: url
+      }, (e, res, body) => {
+        if (e) {
+          return reject(e);
+        }
+
+        if (res.statusCode != 200) {
+          return reject(new Error(`Bad status code (status: ${res.statusCode}, url: ${url})`));
+        }
+
+        feedparser.end(body);
+      });
+    });
+  };
+
+  Promise.map([
+    'http://articlefeeds.nasdaq.com/nasdaq/categories?category=Stocks',
+    'http://feeds.marketwatch.com/marketwatch/marketpulse',
+    'http://feeds.marketwatch.com/marketwatch/realtimeheadlines/',
+    'http://www.cnbc.com/id/19854910/device/rss/rss.html',
+    'http://www.cnbc.com/id/15839135/device/rss/rss.html',
+    'http://www.cnbc.com/id/10001147/device/rss/rss.html',
+    'http://www.cnbc.com/id/100727362/device/rss/rss.html',
+    'http://www.cnbc.com/id/100003114/device/rss/rss.html',
+    'http://www.cnbc.com/id/19836768/device/rss/rss.html',
+    'http://www.cnbc.com/id/10000115/device/rss/rss.html',
+    'http://www.cnbc.com/id/20409666/device/rss/rss.html',
+    'http://www.cnbc.com/id/10000113/device/rss/rss.html',
+    'http://feeds.reuters.com/reuters/businessNews',
+    'http://feeds.reuters.com/news/wealth',
+    'http://feeds.reuters.com/Reuters/PoliticsNews',
+    'http://feeds.reuters.com/reuters/topNews',
+    'http://feeds.reuters.com/Reuters/domesticNews',
+    'http://feeds.reuters.com/Reuters/worldNews',
+    'http://feeds.reuters.com/reuters/hotStocksNews',
+    'http://feeds.reuters.com/reuters/mergersNews',
+    'http://feeds.reuters.com/reuters/governmentfilingsNews',
+    'https://www.investing.com/rss/market_overview.rss',
+    'http://rss.cnn.com/rss/money_latest.rss',
+    'http://www.investopedia.com/feedbuilder/feed/getFeed?feedName=rss_headline',
+    'http://feeds2.feedburner.com/businessinsider',
+    'http://www.businessinsider.com/trending/rss',
+    'http://www.businessinsider.com/moneygame/rss'
+  ], (url) => fetch(url), {concurrency: 4}) // note that concurrency limit
+  .then((feeds) => {
+    console.log('-> End fetching feeds');
+    processFeeder.processor();
   });
 }
-
-feedparser.on('error', function (error) {
-  // always handle errors
-});
-
-feedparser.on('readable', function () {
-  // This is where the action is!
-  var stream = this; // `this` is `feedparser`, which is a stream
-  var meta = this.meta; // **NOTE** the "meta" is always available in the context of the feedparser instance
-  var item;
-
-  //Story.find({}).remove().then(() => {
-    /* ***** */
-    while (item = stream.read()) {     
-      if (typeof item.title !== 'undefined' && item.title) {        
-        Story.update(
-          {
-            title: item.title
-          },
-          {
-            title: item.title,
-            summary: item.summary,
-            link: item.link,
-            pubdate: item.pubdate
-          },
-          {
-            upsert:true
-          },
-          function(err,data) {
-            if (err) console.log(err);
-          });
-      }
-    }
-    /* ***** */
-  //});
-});

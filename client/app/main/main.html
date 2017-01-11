@@ -2,6 +2,7 @@
   <div class="container">
     <h1>News</h1>
     <p>{{$ctrl.storyCollection.length}} stories</p>
+    <button type="button" class="button" ng-click="$ctrl.fireThing()">Fire</button>
   </div>
 </header>
 
@@ -14,6 +15,7 @@
             <span class="label" ng-class="story.position=='Buy' ? 'label-success' : (story.position=='Sell' ? 'label-danger' : '')">{{story.position}}</span>
             <span class="label label-primary">{{story.companies}}</span> 
             {{story.title}}
+            <span class="pull-right">{{story.pubdate}}</span>
           </a>
         </li>
       </ul>

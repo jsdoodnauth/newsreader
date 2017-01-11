@@ -10,6 +10,8 @@ var ProcessorSchema = new mongoose.Schema({
   pubdate: String,
   companies: String,
   position: String,
+  positionCount: Number,
+  keywords: String,
   score: Number,
   active: Boolean
 });

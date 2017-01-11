@@ -12,6 +12,7 @@
 
 import jsonpatch from 'fast-json-patch';
 import Story from './story.model';
+var scanner = require('../../components/feedParser/feedparser');
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -65,6 +66,7 @@ function handleError(res, statusCode) {
 
 // Gets a list of Stories
 export function index(req, res) {
+  scanner.initScan();
   return Story.find().exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
