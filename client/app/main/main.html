@@ -12,10 +12,13 @@
       <ul class="nav nav-tabs nav-stacked" ng-repeat="story in $ctrl.storyCollection">      
         <li>
           <a href="{{story.link}}">
+            <span class="badge">{{story.positionCount}}</span>
             <span class="label" ng-class="story.position=='Buy' ? 'label-success' : (story.position=='Sell' ? 'label-danger' : '')">{{story.position}}</span>
             <span class="label label-primary">{{story.companies}}</span> 
             {{story.title}}
-            <span class="pull-right">{{story.pubdate}}</span>
+            <span class="pull-right">{{story.pubdate}}</span> 
+            <span class="pull-right badge">{{story.keywords}}</span>
+
           </a>
         </li>
       </ul>
