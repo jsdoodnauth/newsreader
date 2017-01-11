@@ -573,7 +573,7 @@ grunt.initConfig({
         heroku: {
             options: {
                 remote: 'heroku',
-                branch: 'master'
+                branch: 'develop'
             }
         },
         openshift: {
