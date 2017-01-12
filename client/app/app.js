@@ -22,6 +22,7 @@ import main from './main/main.component';
 import ratingLookup from './ratingLookup/ratingLookup.component';
 import companyLookup from './companyLookup/companyLookup.component';
 import keywordwatch from './keywordwatch/keywordwatch.component';
+import summary from './summary/summary.component';
 import constants from './app.constants';
 import util from '../components/util/util.module';
 import socket from '../components/socket/socket.service';
@@ -29,7 +30,7 @@ import socket from '../components/socket/socket.service';
 import './app.css';
 
 angular.module('newsReaderApp', [ngCookies, ngResource, ngSanitize, 'btford.socket-io', uiRouter,
-  navbar, footer, main, constants, socket, util, ratingLookup, companyLookup, keywordwatch
+  navbar, footer, main, constants, socket, util, ratingLookup, companyLookup, keywordwatch, summary
 ])
   .config(routeConfig);
 

@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="col-md-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">Buy | Sell</h3>
+      </div>
+      <div class="panel-body">
+        <ul class="list-group" ng-repeat="summaryItem in summaryCtrl.summaryCollection | filter:{category: 'BuySell'}">
+          <li class="list-group-item">{{summaryItem.name}} <span class="badge">{{summaryItem.count}}</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">Companies</h3>
+      </div>
+      <div class="panel-body">
+        <ul class="list-group" ng-repeat="summaryItem in summaryCtrl.summaryCollection | filter:{category: 'Companies'}">
+          <li class="list-group-item">{{summaryItem.name}} <span class="badge">{{summaryItem.count}}</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">Keyword Watchlist</h3>
+      </div>
+      <div class="panel-body">
+        <ul class="list-group" ng-repeat="summaryItem in summaryCtrl.summaryCollection | filter:{category: 'Keywords'}">
+          <li class="list-group-item">{{summaryItem.name}} <span class="badge">{{summaryItem.count}}</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

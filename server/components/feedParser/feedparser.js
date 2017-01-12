@@ -70,10 +70,14 @@ var FeedParser = require('feedparser');
 var Promise    = require('bluebird');
 var request = require('request'); // for fetching the feed
 var feedparser = new FeedParser();
-var processFeeder = require('../processor/newsIdentifier')
+var processFeeder = require('../processor/newsIdentifier');
 
 
 export function initScan() {
+  getFeeds();
+}
+
+function getFeeds() {
   console.log('-> Begin fetching feeds');
   const fetch = (url) => {
     console.log('...' + url);

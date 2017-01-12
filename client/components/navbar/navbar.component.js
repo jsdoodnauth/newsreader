@@ -6,7 +6,7 @@ import angular from 'angular';
 export class NavbarComponent {
   menu = [{
     title: 'Home',
-    state: 'main'
+    state: 'summary'
   },
   {
     title: 'Ratings',
@@ -19,6 +19,10 @@ export class NavbarComponent {
   {
     title: 'Keyword Watch',
     state: 'keywordwatch'
+  },
+  {
+    title: 'Articles',
+    state: 'main'
   }];
   isCollapsed = true;
 

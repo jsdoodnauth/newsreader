@@ -16,6 +16,7 @@ function onConnect(socket) {
   });
 
   // Insert sockets below
+  require('../api/feedsummary/feedsummary.socket').register(socket);
   require('../api/keyword/keyword.socket').register(socket);
   require('../api/companylookup/companylookup.socket').register(socket);
   require('../api/ratinglookup/ratinglookup.socket').register(socket);

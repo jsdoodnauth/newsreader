@@ -9,6 +9,7 @@ import path from 'path';
 
 export default function(app) {
   // Insert routes below
+  app.use('/api/feedsummarys', require('./api/feedsummary'));
   app.use('/api/keywords', require('./api/keyword'));
   app.use('/api/companylookups', require('./api/companylookup'));
   app.use('/api/ratinglookups', require('./api/ratinglookup'));

@@ -4,10 +4,12 @@ import Ratinglookup from '../../api/ratinglookup/ratinglookup.model';
 import Companylookup from '../../api/companylookup/companylookup.model';
 import Keywordlookup from '../../api/keyword/keyword.model';
 
+var summarizer = require('../processor/summarizer');
+
 export function processor() {
   cleanStoryCollection();
   processStories();
-  
+  summarizer.processor();  
 }
 
 function cleanStoryCollection() {
@@ -27,7 +29,7 @@ function cleanStoryCollection() {
       if (Date.parse(targetDate ) <= Date.parse(selectedDate)) {
         //console.log('Within Date limits - ' + targetDate + ' :: ' + selectedDate);
       } else {
-        story.remove().then(() => { console.log('-> Story removed');  });
+        story.remove().then(() => { });
       }
     });
   });
@@ -48,8 +50,8 @@ function processStories() {
             var item = story;
             var shortTitle = createShortTitle(item.title);
             var companyList = parseCompanies(shortTitle, companyCollection);
-            var buyOrSell = findBuyOrSell(shortTitle, ratingCollection);
             var buyOrSellCount = findBuyOrSellCount(shortTitle, ratingCollection);
+            var buyOrSell = rateBuyOrSell(buyOrSellCount);
             var keywords = parseKeywords(shortTitle, keywordCollection);
             Processor.find({}).remove().then(() => {
               Processor.create({
@@ -68,7 +70,7 @@ function processStories() {
         });
       });
     });
-  });  
+  });
 }
 
 function removeSpecialCharacters(title) {
@@ -80,16 +82,10 @@ function createShortTitle(title) {
   return removeSpecialCharacters(removeStopWords(title));
 }
 
-function findBuyOrSell(title, ratingCollection) {  
-  var ratingReturn = ''
-  ratingCollection.forEach(function(rating) {
-    var padTitle = ' ' + title.toLowerCase() + ' ';
-    if (padTitle.indexOf(rating.name.toLowerCase()) !== -1) {
-      ratingReturn = rating.rating;
-      return rating.rating;
-    }
-  });
-  return ratingReturn;
+function rateBuyOrSell(ratingCount) {  
+  if (ratingCount > 0) return "Buy";
+  else if (ratingCount < 0) return "Sell";
+  return "";
 }
 
 function findBuyOrSellCount(title, ratingCollection) {  

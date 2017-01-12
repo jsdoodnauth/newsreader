@@ -47,5 +47,6 @@
 @import 'keywordwatch/keywordwatch.css';
 @import 'main/main.css';
 @import 'ratingLookup/ratingLookup.css';
+@import 'summary/summary.css';
 @import '../components/footer/footer.css';
 /* endinject */
