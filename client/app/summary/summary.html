@@ -1,38 +1,56 @@
 <div class="row">
-  <div class="col-md-4">
-    <div class="panel panel-primary">
-      <div class="panel-heading">
-        <h3 class="panel-title">Buy | Sell</h3>
+  <div class="col-md-6">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">Buy | Sell</h3>
+          </div>
+          <div class="list-group">
+            <a href='#' class="list-group-item" ng-repeat="summaryItem in summaryCtrl.summaryCollection | filter:{category: 'BuySell'}" ng-click="summaryCtrl.getStoriesByBuySell(summaryItem)">{{summaryItem.name}} <span class="badge">{{summaryItem.count}}</span>
+            </a>
+          </div>
+        </div>
       </div>
-      <div class="panel-body">
-        <ul class="list-group" ng-repeat="summaryItem in summaryCtrl.summaryCollection | filter:{category: 'BuySell'}">
-          <li class="list-group-item">{{summaryItem.name}} <span class="badge">{{summaryItem.count}}</span></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="panel panel-primary">
-      <div class="panel-heading">
-        <h3 class="panel-title">Companies</h3>
-      </div>
-      <div class="panel-body">
-        <ul class="list-group" ng-repeat="summaryItem in summaryCtrl.summaryCollection | filter:{category: 'Companies'}">
-          <li class="list-group-item">{{summaryItem.name}} <span class="badge">{{summaryItem.count}}</span></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="panel panel-primary">
-      <div class="panel-heading">
-        <h3 class="panel-title">Keyword Watchlist</h3>
-      </div>
-      <div class="panel-body">
-        <ul class="list-group" ng-repeat="summaryItem in summaryCtrl.summaryCollection | filter:{category: 'Keywords'}">
-          <li class="list-group-item">{{summaryItem.name}} <span class="badge">{{summaryItem.count}}</span></li>
-        </ul>
+      <div class="col-md-6">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">Companies</h3>
+          </div>
+          <div class="list-group">
+            <a href='#' class="list-group-item" ng-repeat="summaryItem in summaryCtrl.summaryCollection | filter:{category: 'Companies'}" ng-click="summaryCtrl.getStoriesByCompany(summaryItem)">{{summaryItem.name}} <span class="badge">{{summaryItem.count}}</span></a>
+          </div>
+        </div>
       </div>
     </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">Keyword Watchlist</h3>
+          </div>
+          <div class="list-group">
+            <a href='#' class="list-group-item" ng-repeat="summaryItem in summaryCtrl.summaryCollection | filter:{category: 'Keywords'}" ng-click="summaryCtrl.getStoriesByKeyword(summaryItem)">{{summaryItem.name}} <span class="badge">{{summaryItem.count}}</span></a>
+          </div>
+        </div>
+      </div>      
+    </div>
   </div>
+    <div class="col-md-6">
+      <div class='row'>
+        <div class="col-md-12">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">{{summaryCtrl.filterTitle}}</h3>
+            </div>
+            <div class="list-group" style="height: 500px; overflow-y: scroll;">
+              <a ng-href='{{summaryItem.link}}' class="list-group-item" ng-repeat="summaryItem in summaryCtrl.filterCollection">
+                <h5 class="list-group-item-heading">{{summaryItem.title}}</h5>
+                <p class="list-group-item-text small">{{summaryItem.summary | limitTo: 180}}</p>
+              </a>
+            </div>      
+          </div>
+        </div>
+      </div>
+    </div>
 </div>

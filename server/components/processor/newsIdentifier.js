@@ -48,6 +48,7 @@ function processStories() {
 
           stories.forEach(function(story){
             var item = story;
+            var plainSummary = htmlToPlaintext(item.summary)
             var shortTitle = createShortTitle(item.title);
             var companyList = parseCompanies(shortTitle, companyCollection);
             var buyOrSellCount = findBuyOrSellCount(shortTitle, ratingCollection);
@@ -57,7 +58,7 @@ function processStories() {
               Processor.create({
                 title: item.title,
                 shorttitle: shortTitle,
-                    summary: item.summary,
+                    summary: plainSummary,
                     link: item.link,
                     pubdate: item.pubdate,
                     companies: companyList,
@@ -71,6 +72,10 @@ function processStories() {
       });
     });
   });
+}
+
+function htmlToPlaintext(text) {
+  return text ? String(text).replace(/<[^>]+>/gm, '') : '';
 }
 
 function removeSpecialCharacters(title) {
@@ -92,7 +97,7 @@ function findBuyOrSellCount(title, ratingCollection) {
   var ratingReturn = 0;
   ratingCollection.forEach(function(rating) {
     var padTitle = ' ' + title.toLowerCase() + ' ';
-    if (padTitle.indexOf(rating.name.toLowerCase()) !== -1) {
+    if (padTitle.indexOf(' ' + rating.name.toLowerCase() + ' ') !== -1) {
       if(rating.rating == 'Buy')  ratingReturn++;
       else if (rating.rating == 'Sell') ratingReturn--;
     }
@@ -115,7 +120,8 @@ function parseCompanies(title, companyCollection) {
 function parseKeywords(title, keywordCollection) {
   var keywordReturn = '';
   keywordCollection.forEach(function(keyword) {
-    if ((title.indexOf(keyword.name.toLowerCase()) !== -1) && (keywordReturn.indexOf(keyword.category.toLowerCase()) === -1)) {    
+    var padTitle = ' ' + title.toLowerCase() + ' ';
+    if ((title.indexOf(' ' + keyword.name.toLowerCase() + ' ') !== -1) && (keywordReturn.indexOf(keyword.category.toLowerCase()) === -1)) {    
       keywordReturn += keyword.category + ' ';
       return keyword.category;
     }

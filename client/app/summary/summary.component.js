@@ -1,12 +1,13 @@
 'use strict';
-const angular = require('angular');
-
-const uiRouter = require('angular-ui-router');
-
+import angular from 'angular';
+import uiRouter from 'angular-ui-router';
 import routes from './summary.routes';
 
+var storyCollection = [];
 export class SummaryComponent {
   summaryCollection = [];
+  filterCollection = [];
+  filterTitle = "Stories";
 
   /*@ngInject*/
   constructor($http, $scope, socket) {
@@ -14,7 +15,9 @@ export class SummaryComponent {
     this.socket = socket;
 
     $scope.$on('$destroy', function() {
+      socket.unsyncUpdates('summary');
       socket.unsyncUpdates('story');
+      socket.unsyncUpdates('filter');
     });
   }
 
@@ -24,6 +27,53 @@ export class SummaryComponent {
         this.summaryCollection = response.data;
         this.socket.syncUpdates('summary', this.summaryCollection);
       });
+    this.$http.get('/api/processors')
+      .then(response => {
+        storyCollection = response.data;
+        this.socket.syncUpdates('story', storyCollection);
+      });
+  }
+
+  getStoriesByBuySell(item) {
+    var coll = storyCollection;
+    var filterCollection = [];
+    
+    for (var i=0; i<coll.length; i++) {
+      if (coll[i].position == item.name) {
+        filterCollection.push(coll[i]);
+      }
+    }
+    this.filterTitle = "Stories by " + item.name;
+    this.filterCollection = filterCollection;
+    this.socket.syncUpdates('filter', this.filterCollection);
+  }
+
+  getStoriesByCompany(item) {
+    var coll = storyCollection;
+    var filterCollection = [];
+    
+    for (var i=0; i<coll.length; i++) {
+      if (coll[i].companies == item.name) {
+        filterCollection.push(coll[i]);
+      }
+    }
+    this.filterTitle = "Stories by Company - " + item.name;
+    this.filterCollection = filterCollection;
+    this.socket.syncUpdates('filter', this.filterCollection);
+  }
+
+  getStoriesByKeyword(item) {
+    var coll = storyCollection;
+    var filterCollection = [];
+    
+    for (var i=0; i<coll.length; i++) {
+      if (coll[i].keywords == item.name) {
+        filterCollection.push(coll[i]);
+      }
+    }
+    this.filterTitle = "Stories by Keyword - " + item.name;
+    this.filterCollection = filterCollection;
+    this.socket.syncUpdates('filter', this.filterCollection);
   }
 }
 

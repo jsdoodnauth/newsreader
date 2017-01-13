@@ -25,7 +25,8 @@ function populate() {
   });
 }
 
-function storeSummaryValues(collection, category){  
+function storeSummaryValues(collection, category){
+  console.log('creating summaries');
   collection.forEach(function(item){
     feedsummary.create({
       name: item.name,
