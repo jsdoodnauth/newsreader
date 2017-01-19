@@ -4,7 +4,7 @@ export default function($stateProvider) {
   'ngInject';
   $stateProvider
     .state('summary', {
-      url: '/summary',
+      url: '/',
       template: '<summary></summary>'
     });
 }

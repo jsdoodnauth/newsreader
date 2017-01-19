@@ -6,6 +6,7 @@ var controller = require('./processor.controller');
 var router = express.Router();
 
 router.get('/', controller.index);
+router.get('/rebuild/', controller.rebuild);
 router.get('/:id', controller.show);
 router.post('/', controller.create);
 router.put('/:id', controller.upsert);

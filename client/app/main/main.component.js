@@ -34,10 +34,15 @@ export class MainController {
   }
 
   fireThing() {
-    console.log('fire thing');
     this.$http.get('/api/stories')
       .then(response => {
-        console.log('success');
+        this.storyCollection = response.data;
+        this.socket.syncUpdates('story', this.storyCollection);
+      });
+  }
+  rebuildSummaries() {
+    this.$http.get('/api/processors/rebuild')
+      .then(response => {
       });
   }
 

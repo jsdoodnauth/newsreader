@@ -12,6 +12,7 @@
 
 import jsonpatch from 'fast-json-patch';
 import Processor from './processor.model';
+var summarizer = require('../../components/processor/summarizer');
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -65,6 +66,14 @@ function handleError(res, statusCode) {
 
 // Gets a list of Processors
 export function index(req, res) {
+  return Processor.find().exec()
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+}
+
+// Rebuild list of Stories
+export function rebuild(req, res) {
+  summarizer.processor();
   return Processor.find().exec()
     .then(respondWithResult(res))
     .catch(handleError(res));

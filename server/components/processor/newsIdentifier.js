@@ -9,7 +9,7 @@ var summarizer = require('../processor/summarizer');
 export function processor() {
   cleanStoryCollection();
   processStories();
-  summarizer.processor();  
+  summarizer.processor();
 }
 
 function cleanStoryCollection() {

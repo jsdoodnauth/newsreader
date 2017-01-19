@@ -22,9 +22,6 @@ if(config.seedDB) {
   require('./config/seed');
 }
 
-require('./components/feedParser/feedparser');
-require('./components/processor/newsIdentifier');
-
 // Setup server
 var app = express();
 var server = http.createServer(app);
@@ -44,6 +41,15 @@ function startServer() {
 }
 
 setImmediate(startServer);
+
+// Start Application Cron Jobs
+var CronJob = require('cron').CronJob;
+new CronJob('0 0 0-23/2 * * 1-5', function() {
+  console.log('You will see this message every second' + new Date());
+}, null, true, 'America/Los_Angeles');
+require('./components/feedParser/feedparser');
+require('./components/processor/newsIdentifier');
+
 
 // Expose app
 exports = module.exports = app;

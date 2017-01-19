@@ -1,8 +1,9 @@
-<header class="hero-unit" id="banner">
+<header class="page-header" id="banner">
   <div class="container">
-    <h1>News</h1>
+    <h2>News</h2>
     <p>{{$ctrl.storyCollection.length}} stories</p>
-    <button type="button" class="button" ng-click="$ctrl.fireThing()">Fire</button>
+    <button type="button" class="button" ng-click="$ctrl.fireThing()">Get Stories</button>
+    <button type="button" class="button" ng-click="$ctrl.rebuildSummaries()">Rebuild Summaries</button>
   </div>
 </header>
 

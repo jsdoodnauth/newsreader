@@ -29,3 +29,13 @@ Running `npm test` will run the unit tests with karma.
 =======
 # newsreader
 Scans RSS feeds of various sites
+
+
+TODO:
+
+
+INSTALLED: 
+https://www.npmjs.com/package/cron
+https://www.npmjs.com/package/moment
+https://www.npmjs.com/package/google-finance
+https://www.npmjs.com/package/traderjs
