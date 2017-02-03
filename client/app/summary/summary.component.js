@@ -2,6 +2,7 @@
 import angular from 'angular';
 import uiRouter from 'angular-ui-router';
 import routes from './summary.routes';
+import moment from 'moment';
 
 var storyCollection = [];
 export class SummaryComponent {
@@ -74,6 +75,10 @@ export class SummaryComponent {
     this.filterTitle = "Stories by Keyword - " + item.name;
     this.filterCollection = filterCollection;
     this.socket.syncUpdates('filter', this.filterCollection);
+  }
+
+  getFuzzyDate(date) {
+    return moment(date).fromNow();
   }
 }
 

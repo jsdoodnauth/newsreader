@@ -26,7 +26,7 @@ function populate() {
 }
 
 function storeSummaryValues(collection, category){
-  console.log('creating summaries');
+  console.log('-> creating summaries: ' + category);
   collection.forEach(function(item){
     feedsummary.create({
       name: item.name,

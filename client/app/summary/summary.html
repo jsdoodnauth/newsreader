@@ -44,7 +44,7 @@
       <div class="list-group" style="height: 500px; overflow-y: scroll;">
         <a ng-href='{{summaryItem.link}}' class="list-group-item" ng-repeat="summaryItem in summaryCtrl.filterCollection">
           <h5 class="list-group-item-heading">{{summaryItem.title}}</h5>
-          <span class="small">{{summaryItem.pubdate}}</span>
+          <span class="small" ng-bind="summaryCtrl.getFuzzyDate(summaryItem.pubdate)"></span> | <span class="small">{{summaryItem.pubdate}}</span>
           <p class="list-group-item-text small">{{summaryItem.summary | limitTo: 180}}</p>
         </a>
       </div>      

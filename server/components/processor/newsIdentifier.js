@@ -29,6 +29,7 @@ function cleanStoryCollection() {
       if (Date.parse(targetDate ) <= Date.parse(selectedDate)) {
         //console.log('Within Date limits - ' + targetDate + ' :: ' + selectedDate);
       } else {
+        console.log('- Story removed: ' + selectedDate);
         story.remove().then(() => { });
       }
     });

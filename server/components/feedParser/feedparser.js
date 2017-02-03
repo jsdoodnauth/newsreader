@@ -158,15 +158,17 @@ function getFeeds() {
     'http://feeds.reuters.com/reuters/topNews',
     'http://feeds.reuters.com/Reuters/domesticNews',
     'http://feeds.reuters.com/Reuters/worldNews',
-    'http://feeds.reuters.com/reuters/hotStocksNews',
-    'http://feeds.reuters.com/reuters/mergersNews',
-    'http://feeds.reuters.com/reuters/governmentfilingsNews',
+    //'http://feeds.reuters.com/reuters/hotStocksNews',
+    //'http://feeds.reuters.com/reuters/mergersNews',
+    //'http://feeds.reuters.com/reuters/governmentfilingsNews',
     'https://www.investing.com/rss/market_overview.rss',
     'http://rss.cnn.com/rss/money_latest.rss',
     'http://www.investopedia.com/feedbuilder/feed/getFeed?feedName=rss_headline',
     'http://feeds2.feedburner.com/businessinsider',
     'http://www.businessinsider.com/trending/rss',
-    'http://www.businessinsider.com/moneygame/rss'
+    'http://www.businessinsider.com/moneygame/rss',
+    'http://finance.yahoo.com/rss/MajorIntegratedOilGas',
+    'http://finance.yahoo.com/rss/AerospaceDefenseMajorDiversified'
   ], (url) => fetch(url), {concurrency: 4}) // note that concurrency limit
   .then((feeds) => {
     console.log('-> End fetching feeds');

@@ -42,13 +42,17 @@ function startServer() {
 
 setImmediate(startServer);
 
+var scanner = require('./components/feedParser/feedparser');
+require('./components/processor/newsIdentifier');
+var moment = require('moment');
+
 // Start Application Cron Jobs
 var CronJob = require('cron').CronJob;
-new CronJob('0 0 0-23/2 * * 1-5', function() {
-  console.log('You will see this message every second' + new Date());
-}, null, true, 'America/Los_Angeles');
-require('./components/feedParser/feedparser');
-require('./components/processor/newsIdentifier');
+
+new CronJob('0 */30 * * * 1-5', function() {
+  //console.log('You will see this message every 2 minutes - ' + new Date());
+  scanner.initScan();
+}, null, true, 'America/New_York');
 
 
 // Expose app

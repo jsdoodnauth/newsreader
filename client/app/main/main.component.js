@@ -1,6 +1,7 @@
 import angular from 'angular';
 import uiRouter from 'angular-ui-router';
 import routing from './main.routes';
+import moment from 'moment';
 
 export class MainController {
   storyCollection = [];
@@ -40,6 +41,11 @@ export class MainController {
         this.socket.syncUpdates('story', this.storyCollection);
       });
   }
+
+  getFuzzyDate(date) {
+    return moment(date).fromNow();
+  }
+  
   rebuildSummaries() {
     this.$http.get('/api/processors/rebuild')
       .then(response => {
